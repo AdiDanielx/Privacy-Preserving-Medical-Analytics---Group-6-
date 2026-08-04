@@ -1,0 +1,25 @@
+# Requires Python 3.10-3.12. On Windows, Python 3.13 currently has NO
+# installable path: syft pins pyarrow==17.0.0, which has no prebuilt wheel
+# for cp313 and fails to build from source without a C++ toolchain. Use
+# Python 3.12 (tested) or 3.10/3.11.
+syft>=0.9.5,<0.9.6
+
+# syft 0.9.5 pins numpy<1.27,>=1.26.4, which forces an older diffprivlib
+# (0.6.6 requires numpy>=2.0.0) and, transitively, an older scikit-learn
+# whose Cython tree internals diffprivlib 0.6.3 still imports directly.
+# scikit-learn 1.3.2 is the oldest release with a Python 3.12 wheel that
+# still exposes those internals -- newer scikit-learn breaks diffprivlib's
+# import, older scikit-learn has no cp312 wheel and needs a C++ compiler.
+numpy>=1.26.4,<1.27
+diffprivlib==0.6.3
+scikit-learn==1.3.2
+
+# kr8s (a syft dependency, used for its optional k8s worker-pool support --
+# unused by this project's local-only demo) imports these without
+# declaring them, so pip's resolver won't pull them in on its own.
+sniffio
+exceptiongroup
+
+cryptography
+pandas
+pytest
